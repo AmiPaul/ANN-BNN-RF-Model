@@ -1,1 +1,57 @@
+# =====================================================
+# IMPORTS
+# =====================================================
 
+import numpy as np
+import pandas as pd
+import random
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# =====================================================
+# RANDOM SEED
+# =====================================================
+
+random.seed(42)
+np.random.seed(42)
+
+# =====================================================
+# FILE PATHS
+# =====================================================
+
+# ------------------------------
+# TRAINING DATASET 1 (Intra)
+# ------------------------------
+train_file1 = r"training-dataset"
+# ------------------------------
+# TRAINING DATASET 2 (Inter)
+# ------------------------------
+train_file2 = r"testing-dataset"
+
+# ------------------------------
+# TESTING DATASET (Random)
+# ------------------------------
+test_file = r"D:\PhD-work-data\PHD-projects\PHD-Projects-pendrive-dta\Phenol-dimer-ML\Mode-specific-excitation-ML\mode-specific\Bz-dimer\Random\random-testing-bz-dimer-tdiss.csv"
+print("Step 1 completed")
+
+import pandas as pd
+import time
+
+start = time.time()
+train_df1 = pd.read_csv(train_file1)
+print("Train 1 loaded in", time.time() - start, "seconds")
+
+start = time.time()
+train_df2 = pd.read_csv(train_file2)
+print("Train 2 loaded in", time.time() - start, "seconds")
+# Renumber trajectories in second dataset
+offset = train_df1["trajectory"].max()
+
+train_df2["trajectory"] = train_df2["trajectory"] + offset
+
+# Now combine
+train_df = pd.concat([train_df1, train_df2], ignore_index=True)
+
+print("Combined training trajectories:",
+      train_df["trajectory"].nunique())
