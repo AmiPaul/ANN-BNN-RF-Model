@@ -1,0 +1,15 @@
+import pandas as pd
+import numpy as np
+
+train_df = pd.read_csv(
+    r"training-data-set-file",
+    low_memory=False
+)
+
+test_df = pd.read_csv(
+    r"D:\PhD-work-data\PHD-projects\PHD-Projects-pendrive-dta\Phenol-dimer-ML\Different-temp-excitation\1000-random-normal-mode-data-tdiss.csv",
+    low_memory=False
+)
+
+print(train_df.shape)
+print(test_df.shape)
