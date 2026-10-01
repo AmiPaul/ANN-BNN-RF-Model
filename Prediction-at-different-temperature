@@ -125,6 +125,7 @@ def prior_fn(kernel_size, bias_size=0, dtype=None):
     ])
 
     return prior_model
+
 def posterior_fn(kernel_size, bias_size=0, dtype=None):
 
     n = kernel_size + bias_size
@@ -144,6 +145,7 @@ def posterior_fn(kernel_size, bias_size=0, dtype=None):
     ])
 
     return posterior_model
+
 model = tf.keras.Sequential([
 
     tf.keras.layers.Input(shape=(X_train_ann.shape[1],)),
@@ -398,7 +400,7 @@ print(results[[
 ]].head())
 # Save results
 results.to_csv(
-    "Hybrid_ANN_BNN_RF_threshold_0.45_DIFF_TEMP.csv",
+    "Results.csv",
     index=False
 )
 
