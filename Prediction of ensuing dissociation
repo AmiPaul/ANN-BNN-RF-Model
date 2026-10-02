@@ -2,12 +2,12 @@ import pandas as pd
 import numpy as np
 
 train = pd.read_csv(
-    r"D:\PhD-work-data\PHD-projects\PHD-Projects-pendrive-dta\Phenol-dimer-ML\Unimolecular-disso-ensuing-disso\phenol-dimer-Data-sets\all-time-data\training1.csv",
+    r"training-set",
     low_memory=False
 )
 
 test = pd.read_csv(
-    r"D:\PhD-work-data\PHD-projects\PHD-Projects-pendrive-dta\Phenol-dimer-ML\Unimolecular-disso-ensuing-disso\phenol-dimer-Data-sets\all-time-data\testing-b6.csv",
+    r"testing-set",
     low_memory=False
 )
 
