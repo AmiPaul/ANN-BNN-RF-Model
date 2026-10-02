@@ -1,1 +1,3 @@
-Hybrid ANN-BNN-RF Model
+<div align="center">
+
+# Hybrid ANN-BNN-RF Model
