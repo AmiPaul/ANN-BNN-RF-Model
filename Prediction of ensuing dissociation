@@ -29,6 +29,7 @@ print(test.shape)
 
 print(train.dtypes)
 print(test.dtypes)
+
 # ---------------------------------
 # Keep only COM <= 16 Å
 # ---------------------------------
@@ -424,7 +425,7 @@ print(f"RMSE = {rmse:.4f}")
 print(f"R²   = {r2:.4f}")
 # Save complete results
 results.to_csv(
-    "Hybrid_ANN_BNN_RF_Logistic_Results-b6.csv",
+    "results.csv",
     index=False
 )
 
