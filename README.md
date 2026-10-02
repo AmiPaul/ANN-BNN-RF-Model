@@ -1,5 +1,8 @@
 # Hybrid ANN-BNN-RF Model
 
+<img width="828" height="585" alt="image" src="https://github.com/user-attachments/assets/c54f50b1-dff5-4833-bd14-3d66b06d405b" />
+
+
 ## Methodology
 
 An **ANN–BNN–RF hybrid machine-learning framework** was developed to predict molecular dissociation time. The ANN–BNN model provides both the **predicted mean and associated uncertainty**, with uncertainty estimated using **200 Monte Carlo stochastic predictions**. An independently trained **Random Forest (RF)** model uses the same input features and target variable to provide an additional nonlinear prediction.
