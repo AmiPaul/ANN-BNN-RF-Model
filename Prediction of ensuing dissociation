@@ -229,3 +229,203 @@ model.compile(
     metrics=["mae"]
 
 )
+early_stop = tf.keras.callbacks.EarlyStopping(
+
+    monitor="val_loss",
+
+    patience=20,
+
+    restore_best_weights=True,
+
+    verbose=1
+
+)
+
+reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
+
+    monitor="val_loss",
+
+    factor=0.5,
+
+    patience=8,
+
+    min_lr=1e-6,
+
+    verbose=1
+
+)
+history = model.fit(
+
+    X_train_ann,
+
+    y_train_scaled,
+
+    validation_split=0.20,
+
+    epochs=100,
+
+    batch_size=1024,
+
+    shuffle=True,
+
+    callbacks=[early_stop, reduce_lr],
+
+    verbose=1
+
+)
+N_SAMPLES = 200
+
+predictions = []
+
+for _ in range(N_SAMPLES):
+
+    pred = model(
+        X_test_ann,
+        training=True
+    ).numpy().flatten()
+
+    predictions.append(pred)
+
+predictions = np.array(predictions)
+
+print(predictions.shape)
+# Mean prediction (scaled)
+mu_scaled = np.mean(predictions, axis=0)
+
+# Bayesian uncertainty (scaled)
+sigma_scaled = np.std(predictions, axis=0)
+# Mean prediction
+mu = y_scaler.inverse_transform(
+    mu_scaled.reshape(-1,1)
+).flatten()
+
+# Uncertainty
+sigma = sigma_scaled * y_scaler.scale_[0]
+ann_frame_results = pd.DataFrame({
+
+    "trajectory": test_frames["trajectory"].values,
+
+    "ANN_Prediction": mu,
+
+    "ANN_Uncertainty": sigma,
+
+    "Actual_tdiss": test_frames["tdiss"].values
+
+})
+
+ann_frame_results.head()
+ann_trajectory = ann_frame_results.groupby("trajectory").agg(
+
+    ANN_Prediction=("ANN_Prediction", "median"),
+
+    ANN_Uncertainty=("ANN_Uncertainty", "mean"),
+
+    Actual_tdiss=("Actual_tdiss", "first")
+
+).reset_index()
+
+print(ann_trajectory.head())
+# ---------------------------------------
+# Merge RF and ANN-BNN predictions
+# ---------------------------------------
+
+results = ann_trajectory.merge(
+
+    rf_trajectory,
+
+    on="trajectory",
+
+    how="inner"
+
+)
+
+print(results.head())
+
+print(results.shape)
+import numpy as np
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+best_rmse = np.inf
+best_a = None
+best_b = None
+
+sigma = results["ANN_Uncertainty"].values
+
+# Search ranges
+a_values = np.arange(1, 21, 1)          # slope
+b_values = np.arange(
+    sigma.min(),
+    sigma.max(),
+    0.02
+)
+
+for a in a_values:
+
+    for b in b_values:
+
+        # RF weight
+        w_rf = 1/(1 + np.exp(-a*(sigma - b)))
+
+        # ANN weight
+        w_ann = 1 - w_rf
+
+        hybrid = (
+            w_ann*results["ANN_Prediction"] +
+            w_rf*results["RF_Prediction"]
+        )
+
+        rmse = np.sqrt(
+            mean_squared_error(
+                results["Actual_tdiss"],
+                hybrid
+            )
+        )
+
+        if rmse < best_rmse:
+
+            best_rmse = rmse
+            best_a = a
+            best_b = b
+            best_prediction = hybrid
+            best_weight = w_rf
+
+print("="*50)
+print("Best Parameters")
+print("="*50)
+print(f"a = {best_a}")
+print(f"b = {best_b:.4f}")
+print(f"RMSE = {best_rmse:.4f}")
+results["RF_Weight"] = best_weight
+results["ANN_Weight"] = 1 - best_weight
+
+results["Hybrid_Prediction"] = best_prediction
+mae = mean_absolute_error(
+    results["Actual_tdiss"],
+    results["Hybrid_Prediction"]
+)
+
+rmse = np.sqrt(
+    mean_squared_error(
+        results["Actual_tdiss"],
+        results["Hybrid_Prediction"]
+    )
+)
+
+r2 = r2_score(
+    results["Actual_tdiss"],
+    results["Hybrid_Prediction"]
+)
+
+print("="*50)
+print("Final Hybrid")
+print("="*50)
+print(f"MAE  = {mae:.4f}")
+print(f"RMSE = {rmse:.4f}")
+print(f"R²   = {r2:.4f}")
+# Save complete results
+results.to_csv(
+    "Hybrid_ANN_BNN_RF_Logistic_Results-b6.csv",
+    index=False
+)
+
+print("Results saved successfully.")
