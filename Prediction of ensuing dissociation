@@ -1,1 +1,231 @@
+import pandas as pd
+import numpy as np
 
+train = pd.read_csv(
+    r"D:\PhD-work-data\PHD-projects\PHD-Projects-pendrive-dta\Phenol-dimer-ML\Unimolecular-disso-ensuing-disso\phenol-dimer-Data-sets\all-time-data\training1.csv",
+    low_memory=False
+)
+
+test = pd.read_csv(
+    r"D:\PhD-work-data\PHD-projects\PHD-Projects-pendrive-dta\Phenol-dimer-ML\Unimolecular-disso-ensuing-disso\phenol-dimer-Data-sets\all-time-data\testing-b6.csv",
+    low_memory=False
+)
+
+print(train.shape)
+print(test.shape)
+# -------------------------------
+# Clean testing dataset
+# -------------------------------
+
+# Convert all columns to numeric
+for col in test.columns:
+    test[col] = pd.to_numeric(test[col], errors="coerce")
+
+# Remove invalid rows
+test = test.dropna().reset_index(drop=True)
+
+print(train.shape)
+print(test.shape)
+
+print(train.dtypes)
+print(test.dtypes)
+# ---------------------------------
+# Keep only COM <= 16 Å
+# ---------------------------------
+
+COM_THRESHOLD = 16.0
+
+train_frames = train[train["com"] <= COM_THRESHOLD].copy()
+
+test_frames = test[test["com"] <= COM_THRESHOLD].copy()
+
+print("Training Frames :", train_frames.shape)
+print("Testing Frames  :", test_frames.shape)
+# ---------------------------------
+# Random Forest Features
+# ---------------------------------
+
+feature_cols = [
+    "time",
+    "angle",
+    "com",
+    "ke",
+    "pe"
+]
+
+X_train_rf = train_frames[feature_cols]
+
+y_train_rf = train_frames["tdiss"]
+
+X_test_rf = test_frames[feature_cols]
+
+y_test_rf = test_frames["tdiss"]
+
+print(X_train_rf.shape)
+print(X_test_rf.shape)
+from sklearn.ensemble import RandomForestRegressor
+
+rf = RandomForestRegressor(
+
+    n_estimators=500,
+
+    max_depth=20,
+
+    min_samples_leaf=2,
+
+    random_state=42,
+
+    n_jobs=-1
+
+)
+
+rf.fit(X_train_rf, y_train_rf)
+rf_pred = rf.predict(X_test_rf)
+
+print(rf_pred.shape)
+rf_frame_results = pd.DataFrame({
+
+    "trajectory": test_frames["trajectory"].values,
+
+    "RF_Prediction": rf_pred
+
+})
+
+rf_trajectory = rf_frame_results.groupby("trajectory").agg(
+
+    RF_Prediction=("RF_Prediction", "median")
+
+).reset_index()
+
+print(rf_trajectory.head())
+from sklearn.preprocessing import StandardScaler
+
+# ---------------------------------
+# Scale input features
+# ---------------------------------
+
+x_scaler = StandardScaler()
+
+X_train_ann = x_scaler.fit_transform(X_train_rf)
+
+X_test_ann = x_scaler.transform(X_test_rf)
+
+# ---------------------------------
+# Scale target
+# ---------------------------------
+
+y_scaler = StandardScaler()
+
+y_train_scaled = y_scaler.fit_transform(
+    y_train_rf.values.reshape(-1,1)
+).flatten()
+
+y_test_scaled = y_scaler.transform(
+    y_test_rf.values.reshape(-1,1)
+).flatten()
+
+print(X_train_ann.shape)
+print(X_test_ann.shape)
+import tensorflow as tf
+import tensorflow_probability as tfp
+import numpy as np
+
+tfd = tfp.distributions
+tfpl = tfp.layers
+
+tf.keras.backend.clear_session()
+
+np.random.seed(42)
+tf.random.set_seed(42)
+def prior_fn(kernel_size, bias_size=0, dtype=None):
+
+    n = kernel_size + bias_size
+
+    prior_model = tf.keras.Sequential([
+
+        tfpl.DistributionLambda(
+
+            lambda t: tfd.Independent(
+
+                tfd.Normal(
+
+                    loc=tf.zeros(n),
+
+                    scale=1.0
+
+                ),
+
+                reinterpreted_batch_ndims=1
+
+            )
+
+        )
+
+    ])
+
+    return prior_model
+def posterior_fn(kernel_size, bias_size=0, dtype=None):
+
+    n = kernel_size + bias_size
+
+    posterior_model = tf.keras.Sequential([
+
+        tfpl.VariableLayer(
+
+            tfpl.IndependentNormal.params_size(n),
+
+            dtype=dtype
+
+        ),
+
+        tfpl.IndependentNormal(n)
+
+    ])
+
+    return posterior_model
+model = tf.keras.Sequential([
+
+    tf.keras.layers.Input(shape=(X_train_ann.shape[1],)),
+
+    # Hidden Layer 1
+    tf.keras.layers.Dense(512, activation="relu"),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Dropout(0.30),
+
+    # Hidden Layer 2
+    tf.keras.layers.Dense(256, activation="relu"),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Dropout(0.25),
+
+    # Hidden Layer 3
+    tf.keras.layers.Dense(128, activation="relu"),
+    tf.keras.layers.BatchNormalization(),
+
+    # Hidden Layer 4
+    tf.keras.layers.Dense(64, activation="relu"),
+
+    # Hidden Layer 5
+    tf.keras.layers.Dense(32, activation="relu"),
+
+    # Bayesian Output Layer
+    tfpl.DenseVariational(
+        units=1,
+        make_prior_fn=prior_fn,
+        make_posterior_fn=posterior_fn,
+        kl_weight=1 / X_train_ann.shape[0]
+    )
+
+])
+
+model.summary()
+model.compile(
+
+    optimizer=tf.keras.optimizers.Adam(
+        learning_rate=3e-4
+    ),
+
+    loss=tf.keras.losses.Huber(),
+
+    metrics=["mae"]
+
+)
