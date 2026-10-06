@@ -1,0 +1,32 @@
+{
+  "system": "phenol",
+  "data_dir": "data/phenol",
+  "train_file": [
+    "train_unimolecular_1500K_com-le-16A_part1.csv.gz",
+    "train_unimolecular_1500K_com-le-16A_part2.csv.gz",
+    "train_unimolecular_1500K_com-le-16A_part3.csv.gz"
+  ],
+  "tests": {
+    "0": "test_ensuing_b0.csv.gz",
+    "2": "test_ensuing_b2.csv.gz",
+    "4": "test_ensuing_b4.csv.gz",
+    "6": "test_ensuing_b6.csv.gz"
+  },
+  "com_threshold": 16.0,
+  "alpha": 1.0,
+  "seed": 42,
+  "rf": {
+    "n_estimators": 500,
+    "max_depth": 20,
+    "min_samples_leaf": 2
+  },
+  "bnn": {
+    "learning_rate": 0.0003,
+    "epochs": 100,
+    "batch_size": 1024,
+    "validation_split": 0.2,
+    "early_stopping_patience": 20,
+    "reduce_lr_patience": 8,
+    "mc_samples": 200
+  }
+}
