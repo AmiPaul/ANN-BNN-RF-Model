@@ -1,0 +1,33 @@
+{
+  "case": "intermolecular",
+  "system": "benzene dimer",
+  "description": "Decomposition of the all-intermolecular excitation simulation (Simu3) into the three mode-pair simulations (Simu13-Simu15).",
+  "full_simulation": {
+    "id": "Simu3",
+    "excitation_energy_kcal_per_mol": 142.3,
+    "file": "all-inter.txt"
+  },
+  "features": [
+    {"simulation": "Simu13", "label": "Mode 1-2", "alias": "1-2", "file": "alldata_1-2_inter.txt"},
+    {"simulation": "Simu14", "label": "Mode 3-4", "alias": "3-4", "file": "alldata_3_4_inter.txt"},
+    {"simulation": "Simu15", "label": "Mode 5-6", "alias": "5-6", "file": "alldata_5_6_inter.txt"}
+  ],
+  "seed": 42,
+  "random_forest": {"n_estimators": 500, "max_depth": 20, "min_samples_leaf": 2},
+  "bnn": {
+    "hidden_units": [6, 6, 3],
+    "dropout": 0.10,
+    "learning_rate": 0.0003,
+    "epochs": 1000,
+    "batch_size": 32,
+    "early_stopping_patience": 50,
+    "mc_samples": 200,
+    "reseed_before_mc": false
+  },
+  "hybrid": {"alpha": 1.0},
+  "shap": {"background_size": 100, "mc_samples_per_call": 100},
+  "plots": {
+    "contribution_title": "Contribution of Intermolecular Modes",
+    "contribution_xlabel": "Mode"
+  }
+}

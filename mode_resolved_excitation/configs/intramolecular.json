@@ -1,0 +1,40 @@
+{
+  "case": "intramolecular",
+  "system": "benzene dimer",
+  "description": "Decomposition of the all-intramolecular excitation simulation (Simu2) into the nine frequency-window simulations (Simu4-Simu12).",
+  "full_simulation": {
+    "id": "Simu2",
+    "excitation_energy_kcal_per_mol": 215.1,
+    "temperature_K": 1500,
+    "file": "all_intra_1500K.txt"
+  },
+  "features": [
+    {"simulation": "Simu4",  "label": "400",       "alias": "400",  "file": "400_range.txt"},
+    {"simulation": "Simu5",  "label": "612-653",   "alias": "612",  "file": "612_range.txt"},
+    {"simulation": "Simu6",  "label": "696-846",   "alias": "696",  "file": "696_range.txt"},
+    {"simulation": "Simu7",  "label": "987-1097",  "alias": "987",  "file": "987_range.txt"},
+    {"simulation": "Simu8",  "label": "1154",      "alias": "1154", "file": "1154_range.txt"},
+    {"simulation": "Simu9",  "label": "1374-1387", "alias": "1300", "file": "1300_range.txt"},
+    {"simulation": "Simu10", "label": "1500",      "alias": "1560", "file": "1560_range.txt"},
+    {"simulation": "Simu11", "label": "1708",      "alias": "1700", "file": "1700_range.txt"},
+    {"simulation": "Simu12", "label": "3174-3192", "alias": "3000", "file": "3000_range.txt"}
+  ],
+  "seed": 42,
+  "random_forest": {"n_estimators": 500, "max_depth": 20, "min_samples_leaf": 2},
+  "bnn": {
+    "hidden_units": [64, 32, 16],
+    "dropout": 0.10,
+    "learning_rate": 0.0003,
+    "epochs": 1000,
+    "batch_size": 32,
+    "early_stopping_patience": 50,
+    "mc_samples": 200,
+    "reseed_before_mc": true
+  },
+  "hybrid": {"alpha": 1.0},
+  "shap": {"background_size": 100, "mc_samples_per_call": 50},
+  "plots": {
+    "contribution_title": "Contribution of Intramolecular Frequency Windows",
+    "contribution_xlabel": "Frequency window (cm$^{-1}$)"
+  }
+}

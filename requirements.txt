@@ -1,0 +1,12 @@
+# Python 3.10. The saved intramolecular notebook run used TensorFlow 2.15.0 and
+# TensorFlow Probability 0.23.0 (Python 3.10.20).
+tensorflow==2.15.0
+tensorflow-probability==0.23.0
+numpy<2          # required by TensorFlow 2.15
+pandas
+scikit-learn
+joblib
+matplotlib
+shap
+# For exact reproducibility, replace the unpinned lines above with the versions
+# printed by `pip freeze` in the environment used for the paper.
