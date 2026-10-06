@@ -1,13 +1,13 @@
-case,simulation,label_cm-1,paper_table3_percent,original_notebook_run_percent
-intermolecular,Simu13,Mode 1-2,15.07,
-intermolecular,Simu14,Mode 3-4,49.71,
-intermolecular,Simu15,Mode 5-6,35.15,
-intramolecular,Simu4,400,11.20,11.209
-intramolecular,Simu5,612-653,15.45,15.485
-intramolecular,Simu6,696-846,8.61,8.611
-intramolecular,Simu7,987-1097,8.85,8.852
-intramolecular,Simu8,1154,15.10,15.105
-intramolecular,Simu9,1374-1387,9.87,9.872
-intramolecular,Simu10,1500,7.47,7.471
-intramolecular,Simu11,1708,10.46,10.461
-intramolecular,Simu12,3174-3192,12.93,12.934
+case,simulation,label_cm-1,contribution_percent
+intermolecular,Simu13,Mode 1-2,15.07
+intermolecular,Simu14,Mode 3-4,49.71
+intermolecular,Simu15,Mode 5-6,35.15
+intramolecular,Simu4,400,11.2
+intramolecular,Simu5,612-653,15.48
+intramolecular,Simu6,696-846,8.61
+intramolecular,Simu7,987-1097,8.85
+intramolecular,Simu8,1154,15.1
+intramolecular,Simu9,1374-1387,9.87
+intramolecular,Simu10,1500,7.47
+intramolecular,Simu11,1708,10.46
+intramolecular,Simu12,3174-3192,12.93
