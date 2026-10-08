@@ -1,0 +1,26 @@
+{
+  "system": "phenol",
+  "data_dir": "data/phenol",
+  "temperature_K": 1500,
+  "train_files": [
+    "phenol-normal-mode-dataset-inter-1500K-100-traj-tdiss.csv.gz",
+    "phenol-normal-mode-dataset-intra-1500K-100-traj-tdiss.csv.gz"
+  ],
+  "test_file": "phenol-normal-mode-dataset-all-mode-1500K-100-traj-tdiss.csv.gz",
+  "alpha": 1.0,
+  "seed": 42,
+  "rf": {"n_estimators": 500, "max_depth": 20, "min_samples_leaf": 2},
+  "bnn": {
+    "loss": "mse",
+    "prior_scale": 0.1,
+    "kl_weight": 1e-7,
+    "learning_rate": 3e-4,
+    "epochs": 200,
+    "batch_size": 256,
+    "validation_split": 0.2,
+    "early_stopping_monitor": "val_mae",
+    "early_stopping_patience": 10,
+    "reduce_lr_patience": 5,
+    "mc_samples": 200
+  }
+}
