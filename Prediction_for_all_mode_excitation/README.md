@@ -9,7 +9,7 @@ or model selection; they serve only as the test set (1500 K).
 | System | Config | Train: inter + intra | Test: all-mode | Normal modes |
 |---|---|---|---|---|
 | Benzene dimer | `configs/benzene.json` | 1000 + 1000 trajectories | 1000 trajectories | 66 |
-| Phenol dimer | `configs/phenol.json` | 100 + 100 trajectories | 100 trajectories | 72 |
+| Phenol dimer | `configs/phenol.json` | 400 + 400 trajectories | 400 trajectories | 72 |
 
 ## Repository layout
 
@@ -22,7 +22,7 @@ all_mode_excitation/
 ```
 
 The full data sets are large (several GB each) and are archived on Zenodo:
-**[DOI to be added]**. Download them and place them in `data/<system>/`
+**https://doi.org/10.5281/zenodo.23232903**. Download them and place them in `data/<system>/`
 (or point the script to them with `--data-dir`).
 
 ## Data
@@ -47,9 +47,9 @@ machine-learning results.
 | Benzene | train, intermolecular excitation | `benzene-normal-mode-dataset-inter-1500K-1000-traj-tdiss.csv.gz` | 1000 | 2601 |
 | Benzene | train, intramolecular excitation | `benzene-normal-mode-dataset-intra-1500K-1000-traj-tdiss.csv.gz` | 1000 | 2601 |
 | Benzene | test, all-mode excitation | `benzene-normal-mode-dataset-all-mode-1500K-1000-traj-tdiss.csv.gz` | 1000 | 1801 |
-| Phenol | train, intermolecular excitation | `phenol-normal-mode-dataset-inter-1500K-100-traj-tdiss.csv.gz` | 100 | 1601 |
-| Phenol | train, intramolecular excitation | `phenol-normal-mode-dataset-intra-1500K-100-traj-tdiss.csv.gz` | 100 | 3249 |
-| Phenol | test, all-mode excitation | `phenol-normal-mode-dataset-all-mode-1500K-100-traj-tdiss.csv.gz` | 100 | 1601 |
+| Phenol | train, intermolecular excitation | `phenol-normal-mode-dataset-inter-1500K-100-traj-tdiss.csv.gz` | 400 | 1601 |
+| Phenol | train, intramolecular excitation | `phenol-normal-mode-dataset-intra-1500K-100-traj-tdiss.csv.gz` | 400 | 3249 |
+| Phenol | test, all-mode excitation | `phenol-normal-mode-dataset-all-mode-1500K-100-traj-tdiss.csv.gz` | 400 | 1601 |
 
 The trajectory numbers in each file start at 1. The script shifts the numbers of the
 second training file, so that the 2000 (benzene) or 200 (phenol) training trajectories
