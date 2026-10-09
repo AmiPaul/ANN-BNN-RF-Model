@@ -31,7 +31,7 @@ The study consists of four workflows. Each one lives in its own folder with its 
 | 1 | **Mode-resolved excitation**: attribution of a full simulation to its component simulations (hybrid model + Kernel SHAP) | benzene dimer | survival curves of the component simulations | none (fit and explain on all points) | [`mode_resolved_excitation/`](mode_resolved_excitation/) |
 | 2 | **Ensuing dissociation**: dimers formed by association collisions | benzene dimer, phenol dimer | unimolecular-dissociation trajectories, 1500 K | association trajectories at impact parameters b = 0, 2, 4, 6 | [`ensuing_dissociation/`](ensuing_dissociation/) |
 | 3 | **Transferability across temperature** | benzene dimer, phenol dimer | all-mode excitation, 1500 K | all-mode excitation, 1000 K | [`Prediction_at_different_temparature/`](Prediction_at_different_temparature/) |
-| 4 | **Transferability to all-mode excitation** | benzene dimer, phenol dimer | intermolecular-mode and intramolecular-mode excitation, 1500 K | all-mode excitation, 1500 K | [`Prediction_for_all_mode_excitation/`](Prediction_for_all_mode_excitation/) |
+| 4 | **Transferability to all-mode and mode-specific excitation** | benzene dimer, phenol dimer | intermolecular-mode and intramolecular-mode excitation, 1500 K | all-mode excitation, 1500 K | [`Prediction_for_all_mode_excitation/`](Prediction_for_all_mode_excitation/) |
 
 Workflows 2–4 use the same hybrid ANN-BNN-RF scheme; they differ in the input features, the
 training and test sets and a few model settings, which are all stored in the `configs/`
