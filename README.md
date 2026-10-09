@@ -155,17 +155,6 @@ inside the workflow folder, which is not tracked by git.
   frames and needs a large amount of memory and several hours; the Kernel SHAP step of the
   intramolecular mode-resolved analysis took about 2 h 14 min.
 
-## Citation
-
-If you use this code or data, please cite the article:
-
-> S. Shaw, B. Deb, M. Hazarika and A. K. Paul, *Transferable and Interpretable Machine
-> Learning Model for Predicting Vibrationally Driven Dissociation Dynamics in Benzene Dimer
-> and Phenol Dimer Complexes*, J. Chem. Theory Comput. (submitted/in press; reference to be added).
-
-and, if you use the processed data of workflows 3 and 4, the Zenodo record
-(https://doi.org/10.5281/zenodo.23232903).
-
 ## License
 
 The code is released under the MIT License; see [LICENSE](LICENSE). The data deposited on
