@@ -22,7 +22,7 @@ temperature_transfer/
 ```
 
 The full data sets are large (about 1.8–1.9 GB per file) and are archived on
-Zenodo: **[DOI to be added]**. Download them and place them in `data/<system>/`
+Zenodo: **https://doi.org/10.5281/zenodo.23232903**. Download them and place them in `data/<system>/`
 (or point the script to them with `--data-dir`).
 
 ## Data
