@@ -7,7 +7,7 @@ tested at four impact parameters (b = 0, 2, 4, 6).
 | System | Config | Train | Test |
 |---|---|---|---|
 | Benzene dimer | `configs/benzene.json` | 1000 trajectories, 1500 K | b0, b2, b4, b6 |
-| Phenol dimer | `configs/phenol.json` | 597 trajectories, 1500 K | b0, b2, b4, b6 |
+| Phenol dimer | `configs/phenol.json` | 600 trajectories, 1500 K | b0, b2, b4, b6 |
 
 ## Data (`data/<system>/`)
 
